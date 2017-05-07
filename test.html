@@ -2,12 +2,11 @@
 <html lang="ja">
 <head>
 	<meta charset="UTF-8">
-	<title>gazou</title>
+	<title>sc</title>
 	<script type="text/javascript" src="http://code.jquery.com/jquery-3.2.1.min.js"></script>
 	<script type="text/javascript" src="jquery.xdomainajax.js"></script>
 </head>
 <body>
-	<h1>サンプル - 別ドメインの外部URLからidやclassなど特定の箇所を抜き出しサイトに表示する方法</h1>
 	<div id="container"></div>
 	
 	<script type=text/javascript>
@@ -17,7 +16,7 @@
 			type: 'GET',
 			success: function(data) {
 				$('#container').html(data.responseText);
-                console.log(data);
+                console.log('aaaa');
 			}
 		});
 	}); 

@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8">
+	<title>gazou</title>
+	<script type="text/javascript" src="http://code.jquery.com/jquery-3.2.1.min.js"></script>
+	<script type="text/javascript" src="jquery.xdomainajax.js"></script>
+</head>
+<body>
+	<h1>サンプル - 別ドメインの外部URLからidやclassなど特定の箇所を抜き出しサイトに表示する方法</h1>
+	<div id="container"></div>
+	<div id="header"></div>
+	<div id="stock"></div>
+	
+	<script type=text/javascript>
+	$(function() {
+		$.ajax({
+			url: 'https://vipergirls.to/threads/2745749-MB-s-Alluring-Vixens-Collection?p=24681630&highlight=alluring+ashlyn#post24681630',
+			type: 'GET',
+			success: function(data) {
+				$('#post_message_24681292').html(data.responseText);
+                console.log('aaaaaaaaaaaaaaaaaa');
+			}
+		});
+	}); 
+	</script> 
+</body>
+</html>

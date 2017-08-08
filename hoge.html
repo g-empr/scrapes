@@ -1,0 +1,1442 @@
+
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <title>非同期処理を覚える！jQueryでajaxを利用する方法 | TechAcademyマガジン</title>
+    <!-- Tag Description -->
+<!-- /Tag Description -->
+    <!-- Open Graph Meta -->
+<meta property="og:site_name" content="TechAcademyマガジン" />
+<meta property="fb:app_id" content="118067648358293" />
+<meta property="og:type" content="article">
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@techacademy" />
+<meta name="twitter:creator" content="@techacademy" />
+  <meta property="og:title" content="非同期処理を覚える！jQueryでajaxを利用する方法【初心者向け】" />
+  <meta property="og:description" content="プログラミング初心者向けに、jQueryでajaxを使って非同期処理をする方法を解説しています。Webサイトを作る上でajaxを利用すれば非同期通信でリロードせず表示することが可能なので、ぜひ使い方を覚えておきましょう。" />
+  <meta property="og:url" content="https://techacademy.jp/magazine/9454" />
+  <meta property="og:image" content="https://static.techacademy.jp/magazine/wp-content/uploads/2016/09/58053653_l-800x533.jpg" />
+  <meta name="twitter:title" content="非同期処理を覚える！jQueryでajaxを利用する方法【初心者向け】" />
+  <meta name="twitter:description" content="プログラミング初心者向けに、jQueryでajaxを使って非同期処理をする方法を解説しています。Webサイトを作る上でajaxを利用すれば非同期通信でリロードせず表示することが可能なので、ぜひ使い方を覚えておきましょう。" />
+  <meta name="twitter:image" content="https://static.techacademy.jp/magazine/wp-content/uploads/2016/09/58053653_l-800x533.jpg" />
+<!-- /Open Graph Meta -->
+    <!-- Facebook -->
+<script>(function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/ja_JP/all.js#xfbml=1&appId=118067648358293";
+    fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+<!-- Twitter -->
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+<!-- Google Plus -->
+<script type="text/javascript" src="https://apis.google.com/js/plusone.js">
+    {lang: 'ja',
+    annotation: 'none'}
+</script>
+<!-- Hatena -->
+<script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>    <link rel="shortcut icon" href="https://static.techacademy.jp/magazine/wp-content/themes/ta-magazine/images/favicon.ico">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" media="screen">
+    <link rel="stylesheet" href="https://static.techacademy.jp/magazine/wp-content/themes/ta-magazine/style.css?1490689661" media="all">
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="https://static.techacademy.jp/magazine/wp-content/themes/ta-magazine/js/lib/wow.min.js"></script>
+    <script src="https://static.techacademy.jp/magazine/wp-content/themes/ta-magazine/js/scripts.js?1499237321"></script>
+    
+<!-- All in One SEO Pack 2.3.8 by Michael Torbert of Semper Fi Web Design[231,291] -->
+<link rel="author" href="https://plus.google.com/102497984944811698625/?rel=author" />
+<meta name="description" itemprop="description" content="プログラミング初心者向けに、jQueryでajaxを使って非同期処理をする方法を解説しています。Webサイトを作る上でajaxを利用すれば非同期通信でリロードせず表示することが可能なので、ぜひ使い方を覚えておきましょう。" />
+
+<meta name="keywords" itemprop="keywords" content="ハウツー" />
+
+<!-- /all in one seo pack -->
+<link rel='dns-prefetch' href='//js.hs-scripts.com' />
+<link rel='dns-prefetch' href='//s0.wp.com' />
+<link rel='dns-prefetch' href='//techacademy.jp' />
+<link rel='dns-prefetch' href='//s.w.org' />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.3\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.3\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/techacademy.jp\/magazine\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.8.1"}};
+			!function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,56826,8203,55356,56819),0,0),c=j.toDataURL(),b===c&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57332,56128,56423,56128,56418,56128,56421,56128,56430,56128,56423,56128,56447),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57332,8203,56128,56423,8203,56128,56418,8203,56128,56421,8203,56128,56430,8203,56128,56423,8203,56128,56447),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55358,56794,8205,9794,65039),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55358,56794,8203,9794,65039),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='contact-form-7-css'  href='https://static.techacademy.jp/magazine/wp-content/plugins/contact-form-7/includes/css/styles.css?ver=4.8' type='text/css' media='all' />
+<link rel='stylesheet' id='wpt-twitter-feed-css'  href='https://static.techacademy.jp/magazine/wp-content/plugins/wp-to-twitter/css/twitter-feed.css?ver=4.8.1' type='text/css' media='all' />
+<link rel='stylesheet' id='wp-syntax-css-css'  href='https://static.techacademy.jp/magazine/wp-content/plugins/wp-syntax/css/wp-syntax.css?ver=1.0' type='text/css' media='all' />
+<link rel='stylesheet' id='wordpress-popular-posts-css'  href='https://static.techacademy.jp/magazine/wp-content/plugins/wordpress-popular-posts/style/wpp.css?ver=3.3.3' type='text/css' media='all' />
+<link rel='stylesheet' id='amazonjs-css'  href='https://static.techacademy.jp/magazine/wp-content/plugins/amazonjs/css/amazonjs.css?ver=0.8' type='text/css' media='all' />
+<link rel='stylesheet' id='jetpack_css-css'  href='https://static.techacademy.jp/magazine/wp-content/plugins/jetpack/css/jetpack.css?ver=4.0.4' type='text/css' media='all' />
+<script type='text/javascript' src='https://static.techacademy.jp/magazine/wp-includes/js/jquery/jquery.js?ver=1.12.4'></script>
+<script type='text/javascript' src='https://static.techacademy.jp/magazine/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.4.1'></script>
+<link rel='https://api.w.org/' href='https://techacademy.jp/magazine/wp-json/' />
+<link rel="canonical" href="https://techacademy.jp/magazine/9454" />
+<link rel="alternate" type="application/json+oembed" href="https://techacademy.jp/magazine/wp-json/oembed/1.0/embed?url=https%3A%2F%2Ftechacademy.jp%2Fmagazine%2F9454" />
+<link rel="alternate" type="text/xml+oembed" href="https://techacademy.jp/magazine/wp-json/oembed/1.0/embed?url=https%3A%2F%2Ftechacademy.jp%2Fmagazine%2F9454&#038;format=xml" />
+<style type='text/css'>img#wpstats{display:none}</style>				<!-- WordPress Popular Posts v3.3.3 -->
+				<script type="text/javascript">//<![CDATA[
+
+					var sampling_active = 0;
+					var sampling_rate   = 100;
+					var do_request = false;
+
+					if ( !sampling_active ) {
+						do_request = true;
+					} else {
+						var num = Math.floor(Math.random() * sampling_rate) + 1;
+						do_request = ( 1 === num );
+					}
+
+					if ( do_request ) {
+
+						// Create XMLHttpRequest object and set variables
+						var xhr = ( window.XMLHttpRequest )
+						  ? new XMLHttpRequest()
+						  : new ActiveXObject( "Microsoft.XMLHTTP" ),
+						url = 'https://techacademy.jp/magazine/wp-admin/admin-ajax.php',
+						params = 'action=update_views_ajax&token=ca413f74fc&wpp_id=9454';
+						// Set request method and target URL
+						xhr.open( "POST", url, true );
+						// Set request header
+						xhr.setRequestHeader( "Content-type", "application/x-www-form-urlencoded" );
+						// Hook into onreadystatechange
+						xhr.onreadystatechange = function() {
+							if ( 4 === xhr.readyState && 200 === xhr.status ) {
+								if ( window.console && window.console.log ) {
+									window.console.log( xhr.responseText );
+								}
+							}
+						};
+						// Send request
+						xhr.send( params );
+
+					}
+
+				//]]></script>
+				<!-- End WordPress Popular Posts v3.3.3 -->
+				</head>
+<body id="top" class="post-template-default single single-post postid-9454 single-format-standard">
+
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-57STXX"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-57STXX');</script>
+<!-- /Google Tag Manager -->
+
+
+<header>
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="navbar-header">
+        <h1 class="ta-magazine navbar-brand">
+          <a href="https://techacademy.jp/magazine">TechAcademyマガジン</a>
+        </h1>
+        <!--<p class="navbar-text">教育 × テクノロジーのWebメディア</p>-->
+      </div>
+      <!--Nav links-->
+      <div class="collapse navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li class="dropdown">
+            <a id="category-news" data-target="#" href="" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">ニュース</a>
+            <ul class="dropdown-menu" aria-labelledby="category-news">
+              <li><a href="https://techacademy.jp/magazine/report">最新記事</a></li>
+<li><a href="https://techacademy.jp/magazine/edtech">EdTech（エドテック）</a></li>            </ul>
+          </li>
+          <li class="dropdown">
+            <a id="category-interview" data-target="#" href="" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">インタビュー</a>
+            <ul class="dropdown-menu" aria-labelledby="category-interview">
+              <li><a href="https://techacademy.jp/magazine/interview">インタビュー</a></li>
+<li><a href="https://techacademy.jp/magazine/eventreport">イベントレポート</a></li>            </ul>
+          </li>
+          <li class="dropdown">
+            <a id="category-tech" data-target="#" href="" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">テクノロジー</a>
+            <ul class="dropdown-menu" aria-labelledby="category-tech">
+              <li><a href="https://techacademy.jp/magazine/programming">プログラミング</a></li>
+<li><a href="https://techacademy.jp/magazine/smartphone">スマートフォンアプリ開発</a></li>
+<li><a href="https://techacademy.jp/magazine/webdesign">Webデザイン</a></li>
+<li><a href="https://techacademy.jp/magazine/web-marketing">Webマーケティング</a></li>
+<li><a href="https://techacademy.jp/magazine/webdirection">Webディレクション</a></li>
+<!--<li><a href="https://techacademy.jp/magazine/tool">ツール系</a></li>-->
+<!--<li><a href="https://techacademy.jp/magazine/microsoft-office">Microsoft Office</a></li>-->
+<!--<li><a href="https://techacademy.jp/magazine/computer">パソコン周辺機器</a></li>-->            </ul>
+          </li>
+          <li class="dropdown">
+            <a id="category-career" data-target="#" href="" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">キャリア</a>
+            <ul class="dropdown-menu" aria-labelledby="category-career">
+              <li><a href="https://techacademy.jp/magazine/career">キャリア・転職</a></li>            </ul>
+          </li>
+          <li class="dropdown">
+            <a id="category-contact" data-target="#" href="" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">お問い合わせ</a>
+            <ul class="dropdown-menu" aria-labelledby="category-contact">
+              <li><a href="https://techacademy.jp/magazine/ads">広告掲載について</a></li>
+<li><a href="https://techacademy.jp/magazine/contact">お問い合わせ</a></li>            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<!-- Drawer -->
+<span id="humberger">
+  <span class="icon-bar"></span>
+  <span class="icon-bar"></span>
+  <span class="icon-bar"></span>
+</span>
+<div id="drawer-nav">
+  <ul>
+    <li>
+    <h3><i class="fa fa-chevron-down fa-l"></i>ニュース</h3>
+      <ul>
+        <li><a href="https://techacademy.jp/magazine/report">最新記事</a></li>
+<li><a href="https://techacademy.jp/magazine/edtech">EdTech（エドテック）</a></li>      </ul>
+    </li>
+    <li>
+      <h3><i class="fa fa-chevron-down fa-l"></i>インタビュー</h3>
+      <ul>
+        <li><a href="https://techacademy.jp/magazine/interview">インタビュー</a></li>
+<li><a href="https://techacademy.jp/magazine/eventreport">イベントレポート</a></li>      </ul>
+    </li>
+    <li>
+      <h3><i class="fa fa-chevron-down fa-l"></i>テクノロジー</h3>
+      <ul>
+        <li><a href="https://techacademy.jp/magazine/programming">プログラミング</a></li>
+<li><a href="https://techacademy.jp/magazine/smartphone">スマートフォンアプリ開発</a></li>
+<li><a href="https://techacademy.jp/magazine/webdesign">Webデザイン</a></li>
+<li><a href="https://techacademy.jp/magazine/web-marketing">Webマーケティング</a></li>
+<li><a href="https://techacademy.jp/magazine/webdirection">Webディレクション</a></li>
+<!--<li><a href="https://techacademy.jp/magazine/tool">ツール系</a></li>-->
+<!--<li><a href="https://techacademy.jp/magazine/microsoft-office">Microsoft Office</a></li>-->
+<!--<li><a href="https://techacademy.jp/magazine/computer">パソコン周辺機器</a></li>-->      </ul>
+    </li>
+    <li>
+      <h3><i class="fa fa-chevron-down fa-l"></i>キャリア</h3>
+      <ul>
+        <li><a href="https://techacademy.jp/magazine/career">キャリア・転職</a></li>      </ul>
+    </li>
+    <li>
+      <h3><i class="fa fa-chevron-down fa-l"></i>お問い合わせ</h3>
+      <ul>
+        <li><a href="https://techacademy.jp/magazine/ads">広告掲載について</a></li>
+<li><a href="https://techacademy.jp/magazine/contact">お問い合わせ</a></li>      </ul>
+    </li>
+  </ul>
+</div>
+<!-- Drawer -->
+
+<!--breadcrumbs-->
+
+  <div class="breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <span typeof="v:Breadcrumb">
+        <a rel="v:url" property="v:title" title="TechAcademy（テックアカデミー）" href="https://techacademy.jp/" class="breadcrumb-home"><i class="fa fa-home"></i><strong>TechAcademy（テックアカデミー）</strong></a>
+      </span>
+              <span typeof="v:Breadcrumb">
+          <a rel="v:url" property="v:title" title="フロントエンドコース" href="https://techacademy.jp/frontend-bootcamp">フロントエンドコース</a>
+        </span>
+            <!-- Breadcrumb NavXT 5.4.0 -->
+<span typeof="v:Breadcrumb"><a rel="v:url" property="v:title" title="Go to the プログラミング category archives." href="https://techacademy.jp/magazine/programming" class="taxonomy category">プログラミング</a></span><span typeof="v:Breadcrumb"><a rel="v:url" property="v:title" title="Go to the JavaScript category archives." href="https://techacademy.jp/magazine/programming/javascript" class="taxonomy category">JavaScript</a></span><span typeof="v:Breadcrumb"><a rel="v:url" property="v:title" title="Go to 非同期処理を覚える！jQueryでajaxを利用する方法【初心者向け】." href="https://techacademy.jp/magazine/9454" class="post post-post current-item">非同期処理を覚える！jQueryでajaxを利用する方法【初心者向け】</a></span>    </div>
+  </div>
+<!--/breadcrumbs-->
+
+<!--campaign bar-->
+<!--/campaign bar-->
+
+
+<!-- container-fluid -->
+<div class="container-fluid" id="contents">
+
+<div class="ad-mobile-top">
+
+  
+    <!-- TechAcademy_MobileTop_320x100 -->
+    <ins class="adsbygoogle"
+         style="display:inline-block;width:320px;height:100px"
+         data-ad-client="ca-pub-2002061910642335"
+         data-ad-slot="9267870307"></ins>
+    <script>
+    (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+
+  
+</div>
+
+<div class="container-inner inner-md">
+  <div class="row">
+
+    <div class="content col-md-9 col-sm-9 animated fadeInUp">
+              <div class="post-category">
+          <a href="https://techacademy.jp/magazine/programming/javascript">JavaScript</a>
+        </div>
+        <article class="post" id="post-9454">
+
+          <div class="post-header">
+
+  <h1><a href="https://techacademy.jp/magazine/9454" rel="bookmark" title="Permanent Link to 非同期処理を覚える！jQueryでajaxを利用する方法【初心者向け】">非同期処理を覚える！jQueryでajaxを利用する方法【初心者向け】</a></h1>
+
+  <p class="post-description">プログラミング初心者向けに、jQueryでajaxを使って非同期処理をする方法を解説しています。Webサイトを作る上でajaxを利用すれば非同期通信でリロードせず表示することが可能なので、ぜひ使い方を覚えておきましょう。</p>
+
+  <div class="social-button">
+    <span class="twitter"><a href="http://twitter.com/share" class="twitter-share-button" data-text="非同期処理を覚える！jQueryでajaxを利用する方法【初心者向け】 | TechAcademyマガジン" data-url="https://techacademy.jp/magazine/9454" data-count="horizontal" data-via="techacademy" data-lang="en">Tweet</a></span>
+    <span class="facebook-like"><div class="fb-like" data-href="https://techacademy.jp/magazine/9454" data-send="false" data-layout="button" data-width="120" data-show-faces="true"></div></span>
+    <span class="facebook-share"><div class="fb-share-button" data-href="https://techacademy.jp/magazine/9454" data-layout="button_count" data-size="small" data-mobile-iframe="true"></div></span>
+    <span class="google mobile-hide"><g:plusone size="medium" href="https://techacademy.jp/magazine/9454"></g:plusone></span>
+    <span class="hatena mobile-hide"><a href="http://b.hatena.ne.jp/entry/https://techacademy.jp/magazine/9454" class="hatena-bookmark-button" data-hatena-bookmark-title="非同期処理を覚える！jQueryでajaxを利用する方法【初心者向け】" data-hatena-bookmark-layout="standard-balloon" data-hatena-bookmark-lang="ja" title="このエントリーをはてなブックマークに追加"><img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a></span>
+    <span class="pocket tablet-hide"><a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en"></a></span>
+    <span class="date tablet-hide"><a href="https://techacademy.jp/magazine/date/2017/03" title="2017年3月の記事アーカイブ"><i class="fa fa-calendar fa-l"></i>2017/3/1</a></span>
+  </div>
+
+  <div class="eyecatch" style="background-image:url('https://static.techacademy.jp/magazine/wp-content/uploads/2016/09/58053653_l-800x533.jpg')"></div>
+
+  <p class="service-description">
+    TechAcademyマガジンはオンラインのプログラミングスクール<a href="https://techacademy.jp/?utm_source=tamagazine&utm_medium=referral&utm_campaign=single-top" target="_blank">TechAcademy [テックアカデミー]</a>が運営する教育×テクノロジーのWebメディアです。初心者でもすぐ勉強できる記事が1,000以上あります。
+  </p>
+
+</div>
+          <div class="post-body">
+              <p><a href="http://techacademy.jp/magazine/8801" target="_blank" rel="noopener">JavaScript</a>のライブラリであるjQueryでajaxの使い方を解説しています。非同期通信によってWebサイトのユーザー体験を上げたいという方はぜひ参考にしてみてください。</p>
+<p>ajaxを取り入れているサイトは多くあるので、覚えておくとサイト制作において便利でしょう。</p>
+<p>&nbsp;</p>
+<p>なお本記事は、<a href="https://techacademy.jp/frontend-bootcamp?utm_source=tamagazine&amp;utm_medium=referral&amp;utm_content=9454&amp;utm_campaign=post" target="_blank" rel="noopener">オンラインブートキャンプ フロントエンドコース（JavaScript・jQuery講座）</a>の内容をもとにしています。</p>
+<p>&nbsp;</p>
+<h2>ajaxとは</h2>
+<p>ajax（エイジャックス）とは、JavaScriptを使用して行われる非同期処理のことを言います。</p>
+<p>通常Webページの内容を変更するためには画面遷移やリロードする必要がありますが、ajaxを使用すればリロードせずにページの内容を変更することができます。</p>
+<p>サーバーにアクセスすることなくページを変更できるのでサーバーの負荷軽減や、リロードの時間の解消によるUX(ユーザーエクスペリエンス)の向上などが利点としてあげられます。</p>
+<p>&nbsp;</p>
+<p>元々、JavaScriptでの実装がメジャーでしたが、昨今はjQueryで書く方法の方がメジャーになっています。</p>
+<p>有名な使用されているページとしてはgoogleMapが挙げられます。地図をドラッグするときに、ページ外の地図をリロードなしで表示することができます。その処理を担っているのがajaxです。</p>
+<p>&nbsp;</p>
+<p><img class="alignnone wp-image-8554" src="https://static.techacademy.jp/magazine/wp-content/uploads/2016/06/20160620.png" alt="20160620" width="100" height="100" align="left" srcset="https://static.techacademy.jp/magazine/wp-content/uploads/2016/06/20160620.png 2000w, https://static.techacademy.jp/magazine/wp-content/uploads/2016/06/20160620-400x400.png 400w, https://static.techacademy.jp/magazine/wp-content/uploads/2016/06/20160620-768x768.png 768w, https://static.techacademy.jp/magazine/wp-content/uploads/2016/06/20160620-800x800.png 800w" sizes="(max-width: 100px) 100vw, 100px" /></p>
+<p>&nbsp;</p>
+<p>田島メンター！ajaxとは何でしょうか？</p>
+<p>&nbsp;</p>
+<p><img class="alignnone wp-image-8553" src="https://static.techacademy.jp/magazine/wp-content/uploads/2016/06/20163020-2.png" alt="20163020-2" width="100" height="100" align="left" srcset="https://static.techacademy.jp/magazine/wp-content/uploads/2016/06/20163020-2.png 2000w, https://static.techacademy.jp/magazine/wp-content/uploads/2016/06/20163020-2-400x400.png 400w, https://static.techacademy.jp/magazine/wp-content/uploads/2016/06/20163020-2-768x768.png 768w, https://static.techacademy.jp/magazine/wp-content/uploads/2016/06/20163020-2-800x800.png 800w" sizes="(max-width: 100px) 100vw, 100px" /></p>
+<p>&nbsp;</p>
+<p>ページ全体を読み直さずに、ページの一部を書き換える仕組みのことだよ。</p>
+<p>&nbsp;</p>
+<p><img class="alignnone wp-image-8554" src="https://static.techacademy.jp/magazine/wp-content/uploads/2016/06/20160620.png" alt="20160620" width="100" height="100" align="left" srcset="https://static.techacademy.jp/magazine/wp-content/uploads/2016/06/20160620.png 2000w, https://static.techacademy.jp/magazine/wp-content/uploads/2016/06/20160620-400x400.png 400w, https://static.techacademy.jp/magazine/wp-content/uploads/2016/06/20160620-768x768.png 768w, https://static.techacademy.jp/magazine/wp-content/uploads/2016/06/20160620-800x800.png 800w" sizes="(max-width: 100px) 100vw, 100px" /></p>
+<p>&nbsp;</p>
+<p>そういうWebアプリ多いですよねー。</p>
+<p>&nbsp;</p>
+<p><img class="alignnone wp-image-8553" src="https://static.techacademy.jp/magazine/wp-content/uploads/2016/06/20163020-2.png" alt="20163020-2" width="100" height="100" align="left" srcset="https://static.techacademy.jp/magazine/wp-content/uploads/2016/06/20163020-2.png 2000w, https://static.techacademy.jp/magazine/wp-content/uploads/2016/06/20163020-2-400x400.png 400w, https://static.techacademy.jp/magazine/wp-content/uploads/2016/06/20163020-2-768x768.png 768w, https://static.techacademy.jp/magazine/wp-content/uploads/2016/06/20163020-2-800x800.png 800w" sizes="(max-width: 100px) 100vw, 100px" /></p>
+<p>&nbsp;</p>
+<p>少し前から当たり前に使われるようになってるよね。さっそくajaxを書いてみよう！</p>
+<p>&nbsp;</p>
+<h2>ajax()の書き方</h2>
+<p>ajaxの基本となる書き方を紹介していきます、</p>
+<p>ajaxはscriptタグ内に処理を書くことができます。</p>
+<pre>&lt;script src="https://code.jquery.com/jquery-3.0.0.min.js"&gt;&lt;/script&gt;
+  $( function() {
+    $.ajax( {
+      //実行する処理。
+    } );
+  } );</pre>
+<p>&nbsp;</p>
+<p><a href="https://techacademy.jp/briefing-lp-s?utm_source=tamagazine&utm_medium=referral&utm_campaign=sidebar-bottom-l&utm_content=single-middle" target='_blank'>[PR] プログラミングで挫折しない学習方法を動画で公開中</a></p><h2>実際に書いてみよう</h2>
+<p>それでは実際に処理を書いてみましょう。今回はローカルにあるファイルをリロードなしで読み込んでみましょう。</p>
+<p>ここで注意ですがChromeではローカルファイルの読み込みができないのでChrome以外のブラウザで実行するようにしてください。</p>
+<h3>//sample.html</h3>
+<pre>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;meta charset="utf-8"&gt;
+    &lt;title&gt;CSS overflow&lt;/title&gt;
+    &lt;script src="https://code.jquery.com/jquery-3.0.0.min.js"&gt;&lt;/script&gt;
+    &lt;script&gt;
+      $(function() {
+        $('#button').click(
+          function() {
+            $.ajax({
+              url: 'sample2.html',
+              dataType: 'html',
+              success: function(data) {
+                $('#text').html(data);
+              },
+              error: function(data) {
+                alert('error');
+              }
+             });
+          }
+        );
+      });
+    &lt;/script&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;input type="button" id="button" value="button"/&gt;
+    &lt;br/&gt;
+    &lt;div id="text"&gt;&lt;/div&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</pre>
+<h3>//sample2.html</h3>
+<pre>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;meta charset="utf-8"&gt;
+    &lt;title&gt;CSS overflow&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;p&gt;Sample2&lt;/p&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</pre>
+<p>urlは読み込むURLを表します。今回の場合「sample2.html」を読み込むのでsample2.htmlを記入してください。</p>
+<p>dataTypeは読み込むデータの種類を記入します。今回の場合htmlを読み込むので、htmlと記入してください。</p>
+<p>dataTypeはhtmlの他にもjsonやcsvなどのメジャーなファイルを読み込むことができます。</p>
+<p>successですが、無事ファイルが読み込めた時の処理を記入します。逆にerrorにはファイルが読み込めなかった時の処理を記入します。</p>
+<p>&nbsp;</p>
+<p>Safariを使って表示の確認をしてみましょう。</p>
+<p><img class="alignnone size-full wp-image-9456" src="https://static.techacademy.jp/magazine/wp-content/uploads/2016/09/9be641c135ceee19be1f2d94312d7438.png" alt="スクリーンショット 2016-09-01 14.42.16" /></p>
+<p>ボタンを押してみて、ボタンの下にsample2の内容が表示されれば成功です。リロードせずに表示できていることがわかります。</p>
+<p><img class="alignnone size-full wp-image-9455" src="https://static.techacademy.jp/magazine/wp-content/uploads/2016/09/4f41c9794acb3be747828b5de0e9df72.png" alt="スクリーンショット 2016-09-01 14.42.24" /></p>
+<p>&nbsp;</p>
+<h2>まとめ</h2>
+<p>今回はajaxの基礎について解説していきました。非常に簡単なサンプルでしたが、ajaxの便利さは分かっていただけたと思います。ajaxはページのユーザビリティーを一つ上に押し上げてくれます。ぜひとも習得を目指しましょう。</p>
+<p>&nbsp;</p>
+<p><img class="alignnone wp-image-8554" src="https://static.techacademy.jp/magazine/wp-content/uploads/2016/06/20160620.png" alt="20160620" width="100" height="100" align="left" srcset="https://static.techacademy.jp/magazine/wp-content/uploads/2016/06/20160620.png 2000w, https://static.techacademy.jp/magazine/wp-content/uploads/2016/06/20160620-400x400.png 400w, https://static.techacademy.jp/magazine/wp-content/uploads/2016/06/20160620-768x768.png 768w, https://static.techacademy.jp/magazine/wp-content/uploads/2016/06/20160620-800x800.png 800w" sizes="(max-width: 100px) 100vw, 100px" /></p>
+<p>&nbsp;</p>
+<p>ajaxって自分のサイトに設置してあるファイルしか利用できないんですか？</p>
+<p>&nbsp;</p>
+<p><img class="alignnone wp-image-8553" src="https://static.techacademy.jp/magazine/wp-content/uploads/2016/06/20163020-2.png" alt="20163020-2" width="100" height="100" align="left" srcset="https://static.techacademy.jp/magazine/wp-content/uploads/2016/06/20163020-2.png 2000w, https://static.techacademy.jp/magazine/wp-content/uploads/2016/06/20163020-2-400x400.png 400w, https://static.techacademy.jp/magazine/wp-content/uploads/2016/06/20163020-2-768x768.png 768w, https://static.techacademy.jp/magazine/wp-content/uploads/2016/06/20163020-2-800x800.png 800w" sizes="(max-width: 100px) 100vw, 100px" /></p>
+<p>&nbsp;</p>
+<p>基本的にはそうなんだ。ドメインが同じでなければいけないんだよね。ただ、ajaxでは、PHPファイルにもアクセスしたり出来るんだよね。</p>
+<p>&nbsp;</p>
+<p><img class="alignnone wp-image-8554" src="https://static.techacademy.jp/magazine/wp-content/uploads/2016/06/20160620.png" alt="20160620" width="100" height="100" align="left" srcset="https://static.techacademy.jp/magazine/wp-content/uploads/2016/06/20160620.png 2000w, https://static.techacademy.jp/magazine/wp-content/uploads/2016/06/20160620-400x400.png 400w, https://static.techacademy.jp/magazine/wp-content/uploads/2016/06/20160620-768x768.png 768w, https://static.techacademy.jp/magazine/wp-content/uploads/2016/06/20160620-800x800.png 800w" sizes="(max-width: 100px) 100vw, 100px" /></p>
+<p>&nbsp;</p>
+<p>PHPプログラムで外部のサイトにアクセスしたり、データベースに接続したりが出来る感じですか？</p>
+<p>&nbsp;</p>
+<p><img class="alignnone wp-image-8553" src="https://static.techacademy.jp/magazine/wp-content/uploads/2016/06/20163020-2.png" alt="20163020-2" width="100" height="100" align="left" srcset="https://static.techacademy.jp/magazine/wp-content/uploads/2016/06/20163020-2.png 2000w, https://static.techacademy.jp/magazine/wp-content/uploads/2016/06/20163020-2-400x400.png 400w, https://static.techacademy.jp/magazine/wp-content/uploads/2016/06/20163020-2-768x768.png 768w, https://static.techacademy.jp/magazine/wp-content/uploads/2016/06/20163020-2-800x800.png 800w" sizes="(max-width: 100px) 100vw, 100px" /></p>
+<p>&nbsp;</p>
+<p>そうそう。その結果をajaxで受け取ることが出来るんだよ。ajaxは使える幅が広いので覚えておきたいね。</p>
+<p>&nbsp;</p>
+<blockquote><p>[お知らせ]TechAcademyでは最短4週間でフロントエンドの技術が身につく<a href="https://techacademy.jp/briefing-lp-frontend?utm_source=tamagazine&amp;utm_medium=referral&amp;utm_content=9454&amp;utm_campaign=post" target="_blank" rel="noopener">フロントエンドオンラインブートキャンプ</a>を開催しています。jQueryを使ってリッチなWebサービスを作りたい方はぜひご覧ください。</p></blockquote>
+          </div>
+
+        </article>
+        <div class="post-footer">
+
+  <!-- 広告 -->
+  
+<!-- 広告 -->
+<div class="ad row wow fadeInUp">
+  <div class="banner-left col-md-6 col-sm-6">
+    <a href="https://techacademy.jp/briefing-lp-s?utm_source=tamagazine&utm_medium=referral&utm_campaign=sidebar-bottom-l" target='_blank'>
+      <img src="https://static.techacademy.jp/magazine/wp-content/uploads/2016/06/common_01_300-250.jpg" alt="" />
+    </a>
+  </div>
+  <div class="banner-right col-md-6 col-sm-6">
+
+    
+      <!-- TechAcademy_SingleBottomRight_300x250 -->
+      <ins class="adsbygoogle"
+           style="display:inline-block;width:300px;height:250px"
+           data-ad-client="ca-pub-2002061910642335"
+           data-ad-slot="6227005503"></ins>
+      <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+
+    
+  </div>
+</div>
+
+<!-- 検索 -->
+<div class="section-md search-box wow fadeInUp">
+  <div class="search-form">
+    <h3 class="section-title title-danger">
+      <i class="fa fa-search fa-l"></i>記事を検索
+    </h3>
+    <form role="search" method="get" id="searchform" action="https://techacademy.jp/magazine/" >
+      <input type="text" value="" name="s" class="search-input" placeholder="キーワード" />
+      <input type="submit" class="btn btn-danger search-btn" value="検索" />
+    </form>
+  </div>
+</div>
+  <!-- ソーシャルボタン -->
+  <div class="section-md social-button-original wow fadeInUp">
+    <a class="btn btn-link btn-submit btn-facebook" href="http://www.facebook.com/sharer.php?u=https://techacademy.jp/magazine/9454&amp;t=非同期処理を覚える！jQueryでajaxを利用する方法【初心者向け】" onClick="window.open(encodeURI(decodeURI(this.href)), 'sharewindow', 'width=550, height=450, personalbar=0, toolbar=0, scrollbars=1, resizable=!'); return false;"><i class="fa fa-facebook fa-l"></i>Facebookでシェア</a>
+
+    <a class="btn btn-link btn-submit btn-twitter" href="http://twitter.com/intent/tweet?text=非同期処理を覚える！jQueryでajaxを利用する方法【初心者向け】&amp;url=https://techacademy.jp/magazine/9454&amp;via=techacademy"><i class="fa fa-twitter fa-l"></i>Twitterでシェア</a>
+
+    <a class="btn btn-link btn-submit btn-hatena" href="http://b.hatena.ne.jp/entry/https://techacademy.jp/magazine/9454" target="_blank"><i class="fa fa-bookmark fa-l"></i>はてブに追加</a>
+  </div>
+
+  <!-- フォローボックス -->
+  <div class="section-md follow-box row wow fadeInUp">
+    <div class="eyecatch col-md-5 col-sm-5" style="background-image:url('https://static.techacademy.jp/magazine/wp-content/uploads/2016/09/58053653_l-800x533.jpg')">
+    </div>
+    <div class="col-md-7 col-sm-7">
+      <div class="follow-wrap">
+        <div class="follow">
+          <img src="https://static.techacademy.jp/magazine/wp-content/themes/ta-magazine/images/logo-magazine.png" alt="TechAcademyマガジン">
+          <h4>
+            この記事を気に入って頂けたら<br>
+            いいね！・フォローをお願いします
+          </h4>
+          <div class="social-fan">
+            <span class="facebook-page"><div class="fb-like" data-href="https://www.facebook.com/techacademy" data-send="false" data-layout="button_count" data-width="120" data-show-faces="true"></div></span>
+            <span class="twitter-like"><a href="https://twitter.com/techacademy" class="twitter-follow-button" data-show-count="false" data-show-screen-name="false">Follow</a></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- キーワード -->
+      <div class="section-md keywords wow fadeInUp">
+      <h3 class="section-title title-warning">
+        <i class="fa fa-tags fa-l"></i>関連するキーワード
+      </h3>
+      <a href="https://techacademy.jp/magazine/keyword/%e3%83%8f%e3%82%a6%e3%83%84%e3%83%bc" rel="tag">ハウツー</a>    </div>
+  
+  <!-- 関連記事 -->
+      <div class="section-md related-posts wow fadeInUp">
+      <h3 class="section-title title-success">
+        <i class="fa fa-copy fa-l"></i>関連する記事
+      </h3>
+      <div class="entry-list t1" id="post-9529" class="post-9529 post type-post status-publish format-standard has-post-thumbnail hentry category-javascript tag-1698">
+  <div class="entry row">
+    <div class="entry-eyecatch col-md-4 col-sm-4 col-xs-4">
+      <a href="https://techacademy.jp/magazine/9529">
+        <div class="eyecatch-image" style="background-image:url('https://static.techacademy.jp/magazine/wp-content/uploads/2016/09/pc-1571963_1280-800x450.jpg')"></div>
+      </a>
+    </div>
+    <div class="entry-detail col-md-8 col-sm-8 col-xs-8">
+      <h3 class="entry-title">
+        <a href="https://techacademy.jp/magazine/9529" rel="bookmark">かっこよく見せたい！jQueryでスライドショーを設置する方法【初心者向け】</a>
+      </h3>
+      <div class="entry-excerpt">
+        JavaScriptのライブラリであるjQueryでスライドショーを設置する方法を紹介します。
+
+コーポレートサイトやECサイトなどのトップにスライドショー...      </div>
+    </div>
+    <span class="entry-category">
+      JavaScript    </span>
+  </div>
+</div><div class="entry-list t1" id="post-9459" class="post-9459 post type-post status-publish format-standard has-post-thumbnail hentry category-javascript tag-1698">
+  <div class="entry row">
+    <div class="entry-eyecatch col-md-4 col-sm-4 col-xs-4">
+      <a href="https://techacademy.jp/magazine/9459">
+        <div class="eyecatch-image" style="background-image:url('https://static.techacademy.jp/magazine/wp-content/uploads/2016/09/61864515_l-1-800x533.jpg')"></div>
+      </a>
+    </div>
+    <div class="entry-detail col-md-8 col-sm-8 col-xs-8">
+      <h3 class="entry-title">
+        <a href="https://techacademy.jp/magazine/9459" rel="bookmark">jQueryで要素を選択するセレクタの使い方【初心者向け】</a>
+      </h3>
+      <div class="entry-excerpt">
+        JavaScriptのライブラリであるjQueryでセレクタの使い方を解説しています。
+
+ある要素だけ動きを出したいなど特定の要素に処理を行う際に便利なので...      </div>
+    </div>
+    <span class="entry-category">
+      JavaScript    </span>
+  </div>
+</div><div class="entry-list t1" id="post-5486" class="post-5486 post type-post status-publish format-standard has-post-thumbnail hentry category-javascript tag-1698">
+  <div class="entry row">
+    <div class="entry-eyecatch col-md-4 col-sm-4 col-xs-4">
+      <a href="https://techacademy.jp/magazine/5486">
+        <div class="eyecatch-image" style="background-image:url('https://static.techacademy.jp/magazine/wp-content/uploads/2015/03/eyecatch-20150310_3.jpg')"></div>
+      </a>
+    </div>
+    <div class="entry-detail col-md-8 col-sm-8 col-xs-8">
+      <h3 class="entry-title">
+        <a href="https://techacademy.jp/magazine/5486" rel="bookmark">JavaScriptでalertを使ってアラートを表示させる方法【初心者向け】</a>
+      </h3>
+      <div class="entry-excerpt">
+        JavaScriptの使い方を初心者向けに紹介した記事です。
+
+今回は、JavaScriptでalertを使ってアラートを表示させる方法について解説します。...      </div>
+    </div>
+    <span class="entry-category">
+      JavaScript    </span>
+  </div>
+</div><div class="entry-list t1" id="post-5556" class="post-5556 post type-post status-publish format-standard has-post-thumbnail hentry category-javascript tag-1698">
+  <div class="entry row">
+    <div class="entry-eyecatch col-md-4 col-sm-4 col-xs-4">
+      <a href="https://techacademy.jp/magazine/5556">
+        <div class="eyecatch-image" style="background-image:url('https://static.techacademy.jp/magazine/wp-content/uploads/2015/03/eyecatch-20150326_04.jpg')"></div>
+      </a>
+    </div>
+    <div class="entry-detail col-md-8 col-sm-8 col-xs-8">
+      <h3 class="entry-title">
+        <a href="https://techacademy.jp/magazine/5556" rel="bookmark">JavaScriptでオブジェクトを使う方法【初心者向け】</a>
+      </h3>
+      <div class="entry-excerpt">
+        JavaScriptをプログラミング初心者向けに紹介した記事です。
+
+今回は、JavaScriptでオブジェクトを使う方法について解説します。
+
+また、...      </div>
+    </div>
+    <span class="entry-category">
+      JavaScript    </span>
+  </div>
+</div><div class="entry-list t1" id="post-5541" class="post-5541 post type-post status-publish format-standard has-post-thumbnail hentry category-javascript tag-1698">
+  <div class="entry row">
+    <div class="entry-eyecatch col-md-4 col-sm-4 col-xs-4">
+      <a href="https://techacademy.jp/magazine/5541">
+        <div class="eyecatch-image" style="background-image:url('https://static.techacademy.jp/magazine/wp-content/uploads/2014/05/eyecatch-20150326_02.jpg')"></div>
+      </a>
+    </div>
+    <div class="entry-detail col-md-8 col-sm-8 col-xs-8">
+      <h3 class="entry-title">
+        <a href="https://techacademy.jp/magazine/5541" rel="bookmark">JavaScriptでsetTimeoutを使う方法【初心者向け】</a>
+      </h3>
+      <div class="entry-excerpt">
+        JavaScriptをプログラミング初心者向けに紹介した記事です。
+
+今回は、JavaScriptでsetTimeoutを使う方法について解説します。
+
+...      </div>
+    </div>
+    <span class="entry-category">
+      JavaScript    </span>
+  </div>
+</div><div class="entry-list t1" id="post-1742" class="post-1742 post type-post status-publish format-standard has-post-thumbnail hentry category-javascript tag-1698">
+  <div class="entry row">
+    <div class="entry-eyecatch col-md-4 col-sm-4 col-xs-4">
+      <a href="https://techacademy.jp/magazine/1742">
+        <div class="eyecatch-image" style="background-image:url('https://static.techacademy.jp/magazine/wp-content/uploads/2014/04/eyecatch-20140410_1.jpg')"></div>
+      </a>
+    </div>
+    <div class="entry-detail col-md-8 col-sm-8 col-xs-8">
+      <h3 class="entry-title">
+        <a href="https://techacademy.jp/magazine/1742" rel="bookmark">JavaScriptでボタンを設置させる方法【初心者向け】</a>
+      </h3>
+      <div class="entry-excerpt">
+        初心者でも簡単に使えるJavaScriptのコードを紹介する記事です。
+
+なお本記事は、オンラインブートキャンプ フロントエンドコース（JavaScript...      </div>
+    </div>
+    <span class="entry-category">
+      JavaScript    </span>
+  </div>
+</div>    </div>
+  
+  <!-- 近似記事 -->
+      <div class="similar-posts wow fadeInUp">
+      <h3 class="section-title title-info">
+        <i class="fa fa-eye fa-l"></i>あわせてよく読まれている記事
+      </h3>
+      <div class="similar-posts cf"><div class="entry-list t1">
+  <div class="entry row">
+    <div class="entry-eyecatch col-md-4 col-sm-4 col-xs-4">
+      <a href="https://techacademy.jp/magazine/9482">
+        <div class="eyecatch-image" style="background-image:url('https://static.techacademy.jp/magazine/wp-content/uploads/2016/09/2-interior-of-library-800x533.jpg')"></div>
+      </a>
+    </div>
+    <div class="entry-detail col-md-8 col-sm-8 col-xs-8">
+      <h3 class="entry-title">
+        <a href="https://techacademy.jp/magazine/9482" rel="bookmark">オフラインでも利用できる！jQueryをダウンロードする方法【初心者向け】</a>
+      </h3>
+      <div class="entry-excerpt">
+        JavaScriptのライブラリであるjQueryを使用するためには二通りの方法があります。
+一つはCDN(Contents Delivery Network)を使用する方法、もう一つはjQueryをダウンロードしてそれをHTML内で読み込む方法です。
+CDNは一行でjQueryを使用することができますが、サーバーからjQueryをダウンロードするため、オフラインでは使用できないという欠点があります。
+そこで今回はオフラインでもjQueryを使用するためにjQueryをダウンロードして使用する方法を解説していきたいと思います。
+jQueryについてそもそもよく分からないという方は、jQueryとは何なのか解説した記事をまずご覧ください。
+&nbsp;
+なお本記事は、オンラインブートキャンプ フロントエンドコース（JavaScript・jQuery講座）の内容をもとにしています。
+&nbsp;
+今回の記事の内容は動画でもご覧いただけます。
+テキストよりも動画の方が理解しやすいという場合はぜひご覧ください。
+
+&nbsp;
+
+&nbsp;
+オンライン上からjQueryのファイルを読み込んで使用するより、ファイルをダウンロードして、自分のPC上から読み込ませたいんですが。
+&nbsp;
+
+&nbsp;
+オフラインでも使用できるので、それもいいね！配布しているサイトがあるので、そこからダウンロードするだけだよ。
+&nbsp;
+
+&nbsp;
+さっそくダウンロードしてみます。
+&nbsp;
+jQuery本体のダウンロード
+jQuery本体はjQueryの公式ホームページからダウンロードすることができます。
+
+こちらのページにある最新版のjQueryをダンロードしてください。
+production、developmentの二種類のリンクがあると思いますが、事情がない限りはproductionの方のファイルをダウンロードしましょう。
+なぜなら、developmentの場合、非圧縮ファイルがダウンロードされるため、処理が重くなってしまう可能性があるからです。
+&nbsp;
+HTMLファイルでjQueryを読み込む
+ダウンロードをした後は、作業するHTMLと同じフォルダにjQueryのファイルを置いてください。
+jQueryのファイルの読み込みはCSSのファイルの読み込みとすこし似ています。
+&lt;script src="jquery-3.1.0.min.js"&gt;&lt;/script&gt;
+2016年8月時点での最新版のjQueryが3.1.0のため上のようなコードになっていますが、自分が使用するバージョンに合わせて名前を変えるようにしてください。
+&nbsp;
+[PR] プログラミングで挫折しない学習方法を動画で公開中まとめ
+今回はCDNを使用せずにjQueryをダウンロードする方法について解説していきました。ダウンロードで動かすことのメリットとしては、jQueryをオフラインで使用できるということが挙げられます。
+しかし、一般的にCDNで読み込んだ方が処理は早いので、オンライン上のみ使われるページの場合CDNを利用して書くようにしましょう。
+&nbsp;
+
+&nbsp;
+jQueryは、CDNからでもファイルを設置してからでも読みこんで使用することが出来るんですね。どちらがいいでしょうか？
+&nbsp;
+
+&nbsp;
+例えば自分で借りているサーバーにアクセス出来なくなった場合、jQueryも動作しないので、ファイルを設置するほうでも問題ないかな。
+&nbsp;
+
+&nbsp;
+最初のうちは、ファイルを設置して書いてみます！
+&nbsp;
+[お知らせ]TechAcademyでは最短4週間でフロントエンドの技術が身につくフロントエンドオンラインブートキャンプを開催しています。jQueryを使ってリッチなWebサービスを作りたい方はぜひご覧ください。
+
+      </div>
+    </div>
+    <span class="entry-category">
+      JavaScript
+    </span>
+  </div>
+</div>
+
+<div class="entry-list t1">
+  <div class="entry row">
+    <div class="entry-eyecatch col-md-4 col-sm-4 col-xs-4">
+      <a href="https://techacademy.jp/magazine/9520">
+        <div class="eyecatch-image" style="background-image:url('https://static.techacademy.jp/magazine/wp-content/uploads/2016/09/58030669_l-800x533.jpg')"></div>
+      </a>
+    </div>
+    <div class="entry-detail col-md-8 col-sm-8 col-xs-8">
+      <h3 class="entry-title">
+        <a href="https://techacademy.jp/magazine/9520" rel="bookmark">jQueryでloadメソッドを使って外部のHTMLを読み込む方法【初心者向け】</a>
+      </h3>
+      <div class="entry-excerpt">
+        JavaScriptのライブラリであるjQueryでloadメソッドを使って外部のHTMLを読み込む方法を紹介します。
+簡単に別ファイルを読み込むことができるので、使い方を覚えておきましょう。
+jQueryについてそもそもよく分からないという方は、jQueryとは何なのか解説した記事をまずご覧ください。
+&nbsp;
+なお本記事は、オンラインブートキャンプ フロントエンドコース（JavaScript・jQuery講座）の内容をもとにしています。
+&nbsp;
+目次
+
+loadとは
+loadの書き方
+実際に書いてみよう
+
+&nbsp;
+loadとは
+別のHTMLに書かれた内容を読み込むときに使います。
+例えば、メニューバーが共通としてそれを各ページに記述するのは大変です。
+そこで、jQueryの「load」を利用して、他のページに記述しておいたメニューのHTMLを読み込むという事ができます。そうすることで、コードが込み合わずにスッキリとしたコーディングが実現できます。
+&nbsp;
+
+&nbsp;
+田島メンター！他のファイルから要素を取得することも出来るんですか？
+&nbsp;
+
+&nbsp;
+自分のサイトや同じドメインの中で、という条件がつくけど、出来るよ。
+&nbsp;
+
+&nbsp;
+ドメインが同じじゃないと取得できないんですかー。
+&nbsp;
+
+&nbsp;
+安全のためにそうなってるんだよね。さっそくloadメソッドを書いてみよう！
+&nbsp;
+[PR] プログラミングで挫折しない学習方法を動画で公開中loadの書き方
+書き方を説明します。仮に「header.html」にタイトルが書いてあるとします。
+それを外部ファイルとして「sample.html」から読み込むとすれば、以下のようなスクリプトが必要です。
+JavaScript
+$(function(){
+  $("#head").load("header.html");
+});
+また、「sample.html」内で設定した「id」の箇所に上で読み込んだhtmlが読み込まれます。このときに注意するのは、「header.html」と「sample.html」は異なるファイルであるという事です。
+「sample.html」で、「header.html」を指定してもjQueryが動作しないことがあります。
+そのために「header.html」についての記述は「sample.html」でなく「header.html」に直接行うようにしましょう。
+&nbsp;
+実際に書いてみよう
+実際にソースコードを書いてみましょう。
+※Chromeでは反映されませんので、FirefoxやIEで確認しましょう。
+HTML
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;meta charset="utf-8"&gt;
+    &lt;script type="text/javascript" src="http://code.jquery.com/jquery-2.2.3.min.js"&gt;&lt;/script&gt;
+    &lt;script src="sample.js" type="text/javascript"&gt;&lt;/script&gt;
+    &lt;title&gt;jQuery&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;div id="head"&gt;&lt;/div&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+HTML
+&lt;h1&gt;header.htmlの内容です。&lt;/h1&gt;
+JavaScript
+$(function(){
+  $("#head").load("header.html");
+});
+しっかりと「header.html」の内容が「sample.html」に反映することができています。
+
+このようにして行うことで、ヘッダーを共通部分として処理することができるようになります。
+&nbsp;
+以上、loadメソッドを使って外部ファイルを読み込む方法について解説しました。
+ヘッダーやフッターなどどのページにもある内容はこのようにファイルを分けてコーディングすることで作業効率が上がるでしょう。
+&nbsp;
+
+&nbsp;
+今あるページに別のページを読み込むことが出来ました！
+&nbsp;
+
+&nbsp;
+書き方によっては、別のページの一部分を読み込むことも出来るよ。
+&nbsp;
+
+&nbsp;
+リロード(更新)しなくてもページの一部って変えられるんですねー。
+&nbsp;
+
+&nbsp;
+そうそう。loadメソッドって、内部でjQueryのajaxメソッドを呼び出してるんだよね。ページをリロードしなくても一部を更新出来る仕組みなんだ。
+&nbsp;
+[お知らせ]TechAcademyでは最短4週間でフロントエンドの技術が身につくフロントエンドオンラインブートキャンプを開催しています。jQueryを使ってリッチなWebサービスを作りたい方はぜひご覧ください。
+
+      </div>
+    </div>
+    <span class="entry-category">
+      JavaScript
+    </span>
+  </div>
+</div>
+
+<div class="entry-list t1">
+  <div class="entry row">
+    <div class="entry-eyecatch col-md-4 col-sm-4 col-xs-4">
+      <a href="https://techacademy.jp/magazine/9468">
+        <div class="eyecatch-image" style="background-image:url('https://static.techacademy.jp/magazine/wp-content/uploads/2016/03/1-aerial-view-of-digital-tablet-computer-keyboard-and-mouse-on-wooden-table-800x531.jpg')"></div>
+      </a>
+    </div>
+    <div class="entry-detail col-md-8 col-sm-8 col-xs-8">
+      <h3 class="entry-title">
+        <a href="https://techacademy.jp/magazine/9468" rel="bookmark">CDNからjQueryファイルを読み込む方法【初心者向け】</a>
+      </h3>
+      <div class="entry-excerpt">
+        JavaScriptのライブラリであるjQueryでファイルを読み込む方法を解説しています。
+CDNでの読み込みでバージョン指定や最新版の使用など手軽に行いたい場合に便利なので、ぜひ理解しておきましょう。
+&nbsp;
+なお本記事は、オンラインブートキャンプ フロントエンドコース（JavaScript・jQuery講座）の内容をもとにしています。
+&nbsp;
+CDNとは
+CDNとは、Content Delivery Networkの略称のことです。
+自分のWebページを公開しているサーバーとは別のサーバーにコンテンツを配信するためのサーバーを用意し、そこからコンテンツを取得します。
+サーバーの処理を分散させることで、負荷分散や通信速度の上昇が見込めます。
+jQueryでは、実行のためのソースをCDN用のサーバーに保存し、そのサーバーにアクセスすることで、自分達のプログラムでもjQueryを実行することができます。
+&nbsp;
+jQueryを実行するためにはCDNを使用する方法の他に、jQuery本体をダウンロードして使用する方法もありますが、そちらの方法よりも実行速度が速いため、ほとんどの場合でCDNが使用されます。
+&nbsp;
+今回の記事の内容は動画でもご覧いただけます。
+テキストよりも動画の方が理解しやすいという場合はぜひご覧ください。
+
+&nbsp;
+
+&nbsp;
+CDNというのは何でしょうか？
+&nbsp;
+
+&nbsp;
+簡単に言うと、オンライン上の他のコンピュータからjQueryのソースコードを読み込んで使用することが出来るってことなんだ。
+&nbsp;
+
+&nbsp;
+信頼できるCDNなら、自分のコンピューターやレンタルサーバー上にjQueryのファイルを設置するよりも良いかもしれませんね。
+&nbsp;
+実際に読み込んでみよう
+jQueryを読み込むためには以下の行をhtmlに追加してください。
+htmlは上から実行されていくので、jQuery自体のコードより上にこのコードを書くようにしてください。
+&lt;script src="https://code.jquery.com/jquery-3.0.0.min.js"&gt;&lt;/script&gt;
+実際にCDNからjQueryが読み込まれているか確かめるためにコンソールから確認してみましょう。
+ブラウザをChromeにして、「command+option+i」を押してみましょう。すると以下のように開発用のコンソールが出てきます。
+
+開いているhtmlファイルに以下のコードを打ち込んでリロードしてください。
+&lt;script&gt;
+  $(function() {
+
+  });
+&lt;/script&gt;
+するとコンソールにエラーが出ます。
+
+Uncaught ReferenceError: $ is not defined
+上記は「$」が定義されていないという文字です。
+そのエラーを解消するために冒頭にこのコードを打ち込んでください。
+&lt;script src="https://code.jquery.com/jquery-3.0.0.min.js"&gt;&lt;/script&gt;
+するとエラーが消えていることがわかります。
+上のコードによってCDNでjQueryを読み込むことができ、エラーが消えたというわけです。
+&nbsp;
+[PR] プログラミングで挫折しない学習方法を動画で公開中まとめ
+今回はjQueryをCDNから読み込む方法について解説していきました。
+jQueryの他にもプラグインを使う際などにCDNを使用することがあります。CDNの意味を理解していればそう言った場面でもスムーズに使用できるので是非覚えておくと良いでしょう。
+&nbsp;
+
+&nbsp;
+jQueryのファイルを読み込んでからじゃないと、jQueryに沿った書き方というのは出来ないんですね。
+&nbsp;
+
+&nbsp;
+そうそう。ちなみに、サンプルで書かれているのは、全てのHTMLファイルを読み込んでから中の処理を実行するって意味なんだ。
+&nbsp;
+
+&nbsp;
+最初に書く、決まり文句みたいなものですか？
+&nbsp;
+
+&nbsp;
+その通り！全部読み込んでから処理するので、一番外側に書いてあるHTMLタグについても処理できるよ。
+&nbsp;
+[お知らせ]TechAcademyでは最短4週間でフロントエンドの技術が身につくフロントエンドオンラインブートキャンプを開催しています。jQueryを使ってリッチなWebサービスを作りたい方はぜひご覧ください。
+
+      </div>
+    </div>
+    <span class="entry-category">
+      JavaScript
+    </span>
+  </div>
+</div>
+
+<div class="entry-list t1">
+  <div class="entry row">
+    <div class="entry-eyecatch col-md-4 col-sm-4 col-xs-4">
+      <a href="https://techacademy.jp/magazine/9449">
+        <div class="eyecatch-image" style="background-image:url('https://static.techacademy.jp/magazine/wp-content/uploads/2016/09/PAK145152451_TP_V-800x533.jpg')"></div>
+      </a>
+    </div>
+    <div class="entry-detail col-md-8 col-sm-8 col-xs-8">
+      <h3 class="entry-title">
+        <a href="https://techacademy.jp/magazine/9449" rel="bookmark">動きを簡単に実装する！jQuery UIを利用する方法【初心者向け】</a>
+      </h3>
+      <div class="entry-excerpt">
+        JavaScriptのライブラリであるjQueryのjQuery UIを利用する方法を解説しています。
+jQuery UIという動きを簡単に実装できる便利なツールの使い方を紹介しているので、jQueryを学習している方はぜひ参考にしてみてください。いろんな動きを手軽に表現することができるはずです。
+&nbsp;
+なお本記事は、オンラインブートキャンプ フロントエンドコース（JavaScript・jQuery講座）の内容をもとにしています。
+&nbsp;
+jQuery UIとは
+jQuery UIとは、jQueryの便利な機能をまとめたツールのことです。
+jQueryは、もともJavaScriptを使いやすくするためのライブラリでしたが、そのjQueryをさらにパッケージ化したものなので非常に使いやすいものになっています。
+例えば、日付を入力する際にDatePickerを使ったり、入力の自動補完であったり、使うユーザーにとって嬉しい機能を簡単に実装することが出来ます。
+&nbsp;
+
+&nbsp;
+jQuery UIというのは何でしょうか？
+&nbsp;
+
+&nbsp;
+ユーザーインターフェースに特化したjQueryのライブラリのことなんだよ。
+&nbsp;
+
+&nbsp;
+ユーザーインターフェース(UI)というのは、デザイン的なことですか？
+&nbsp;
+
+&nbsp;
+そうそう。操作や、部品的な素材、表示効果などに特化しているんだ。さっそくjQuery UIを実際に使用してみよう！
+&nbsp;
+jQuery UIを利用する方法
+jQuery UIの導入自体は二行で終了します。
+&lt;script src="https://code.jquery.com/jquery-3.0.0.min.js"&gt;&lt;/script&gt;
+&lt;script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"&gt;&lt;/script&gt;
+一行目はjQueryを読み込むためのコードです。二行目がjQuery UIを読み込むためのコードです。
+jQuery　UIはjQueryを使用して書かれているので順番を間違えるとエラーが出てしまうので気をつけて下さい。
+&nbsp;
+[PR] プログラミングで挫折しない学習方法を動画で公開中実際にjQuery UIを使用してみる。
+div要素を自由にドラッグできるコードを書いてみます。
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;meta charset="utf-8"&gt;
+    &lt;script src="https://code.jquery.com/jquery-3.0.0.min.js"&gt;&lt;/script&gt;
+    &lt;script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"&gt;&lt;/script&gt;
+    &lt;script&gt;
+      $(function() {
+        $("#div1").draggable();
+   
+      </div>
+    </div>
+    <span class="entry-category">
+      JavaScript
+    </span>
+  </div>
+</div>
+
+<div class="entry-list t1">
+  <div class="entry row">
+    <div class="entry-eyecatch col-md-4 col-sm-4 col-xs-4">
+      <a href="https://techacademy.jp/magazine/9464">
+        <div class="eyecatch-image" style="background-image:url('https://static.techacademy.jp/magazine/wp-content/uploads/2016/09/53103267_l-800x534.jpg')"></div>
+      </a>
+    </div>
+    <div class="entry-detail col-md-8 col-sm-8 col-xs-8">
+      <h3 class="entry-title">
+        <a href="https://techacademy.jp/magazine/9464" rel="bookmark">jQueryでeachメソッドを使って繰り返し処理をする方法【初心者向け】</a>
+      </h3>
+      <div class="entry-excerpt">
+        どのプログラミング言語にも繰り返し処理を実装するためのメソッドは必ず存在しています。jQueryにももちろん存在し、eachというメソッドで実装することができます。
+今回は、JavaScriptのライブラリであるjQueryのeachメソッドについて解説していきたいと思います。
+jQueryについてそもそもよく分からないという方は、jQueryとは何なのか解説した記事をまずご覧ください。
+&nbsp;
+なお本記事は、オンラインブートキャンプ フロントエンドコース（JavaScript・jQuery講座）の内容をもとにしています。
+&nbsp;
+eachメソッドの書き方
+jQueryメソッドの基本形は以下です。
+$.each(オブジェクト, 処理)
+ループを回すためのオブジェクトを第一引数に、処理を第二引数に書きます。
+例えば配列に対してループを回したい時は以下のように書きます。
+var array = [ “1”, “2”, “3”, “4”, “5” ];
+　　$.each(array, function(){
+});
+この場合arrayの各要素に対して、function内の処理を行います。
+&nbsp;
+
+&nbsp;
+jQueryにも繰り返し文があるんですねー。
+&nbsp;
+
+&nbsp;
+そうそう。jQueryで取得した要素の数って何個かわからない場合もあるし、要素オブジェクトもjQueryで取得しているから、jQueryのeachメソッドで処理したほうがいいんだよ。
+&nbsp;
+
+&nbsp;
+処理には関数を書けばいいんですね？
+&nbsp;
+
+&nbsp;
+その通り！実際にeachメソッドを書いてみよう！
+&nbsp;
+実際に書いてみよう
+今回はeachメソッドを利用して、ボタンを押すと文字のスタイルが変わるという実装を行ってみます。
+HTML
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;meta charset="utf-8"&gt;
+    &lt;script src="https://code.jquery.com/jquery-3.0.0.min.js"&gt;&lt;/script&gt;
+    &lt;script&gt;
+      var array = [ "one", "two", "three" ];
+      $("button").click(function() {
+        $.each(array, function(){
+          alert(this);
+      
+      </div>
+    </div>
+    <span class="entry-category">
+      JavaScript
+    </span>
+  </div>
+</div>
+
+<div class="entry-list t1">
+  <div class="entry row">
+    <div class="entry-eyecatch col-md-4 col-sm-4 col-xs-4">
+      <a href="https://techacademy.jp/magazine/9494">
+        <div class="eyecatch-image" style="background-image:url('https://static.techacademy.jp/magazine/wp-content/uploads/2016/09/man-working-on-computer-with-mobile-phone-and-sunglasses-on-table-800x534.jpg')"></div>
+      </a>
+    </div>
+    <div class="entry-detail col-md-8 col-sm-8 col-xs-8">
+      <h3 class="entry-title">
+        <a href="https://techacademy.jp/magazine/9494" rel="bookmark">今すぐ覚えておきたい！jQueryの基本の書き方【初心者向け】</a>
+      </h3>
+      <div class="entry-excerpt">
+        JavaScriptのライブラリであるjQueryの基本の書き方について紹介します。
+jQueryは、JavaScriptよりもコーディングの分量が少なくイベントの処理を行うことができます。初心者の方でも手軽に利用できるので、覚えておくと良いでしょう。
+jQueryについてそもそもよく分からないという方は、jQueryとは何なのか解説した記事をまずご覧ください。
+&nbsp;
+なお本記事は、オンラインブートキャンプ フロントエンドコース（JavaScript・jQuery講座）の内容をもとにしています。
+&nbsp;
+今回の記事の内容は動画でもご覧いただけます。
+テキストよりも動画の方が理解しやすいという場合はぜひご覧ください。
+
+&nbsp;
+目次
+
+jQueryの基本構文
+簡単なメソッドを実際に使ってみよう
+
+&nbsp;
+jQueryの基本構文
+jQueryは読み終わった後に実行される必要があるため、jQueryの処理は以下のように記述しましょう。
+jQuery
+jQuery(document).ready(function(){
+ //jQueryで実行する内容
+ });
+
+「jQuery」の部分は省略して「$」と記述することが一般的です。しかし、今話題のWordPressでは、jQueryの部分を省略せずに記述します。
+上記に書いてある「セレクタ」はCSSとほぼ同じものが使用できると思っていてください。
+上のコードはちゃんと書いたjQueryです。省略できるところがまだあり、「$(document).ready()」のショートカットである下記の記述でも動きます。
+メソッド(ready)の位置には、特定のイベントを設定することができ、は以下のようなものがあります。
+
+click
+dblclick
+mousedown
+mouseover
+
+上記以外にも多くのイベントが存在します。
+&nbsp;
+
+&nbsp;
+イベントというのは何でしょうか？
+&nbsp;
+
+&nbsp;
+ボタンやHTMLの領域をクリックしたり、何か動作したときに特定の処理をするように設定できるんだ。
+&nbsp;
+
+&nbsp;
+JavaScriptにもありましたね。jQueryだと簡単に書けたりするんですか？
+&nbsp;
+
+&nbsp;
+そうそう。イベントではないけど、jQueryを簡単に使ってみよう！
+&nbsp;
+[PR] プログラミングで挫折しない学習方法を動画で公開中簡単なメソッドを実際に使ってみよう
+実際にjQueryを書いてみましょう。同一階層に、jQueryを置いてください。
+HTML
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+ 　&lt;head&gt;
+ 　　　&lt;meta charset="utf-8"&gt;
+ 　　　&lt;script src="jquery.min.js" type="text/javascript"&gt;&lt;/script&gt;
+ 　　　&lt;title&gt;jQuery&lt;/title&gt;
+ 　&lt;/head&gt;
+　 &lt;body&gt;
+ 　　　&lt;ul&gt;
+ 　　　　　&lt;li id="sample"&gt;sample_textsample_text&lt;/li&gt;
+　　　　　 &lt;li&gt;sample_textsample_text&lt;/li&gt;
+ 　　　　　&lt;li&gt;sample_textsample_text&lt;/li&gt;
+ 　　　　　&lt;li&gt;sample_textsample_text&lt;/li&gt;
+ 　　　　　&lt;li&gt;sample_textsample_text&lt;/li&gt;
+ 　　　&lt;/ul&gt;
+ 　　　&lt;script&gt;
+ 　　　　　$("#sample").css("color","#d9534f");
+ 　　　&lt;/script&gt;
+ 　&lt;/body&gt;
+&lt;/html&gt;
+今回の例はイベントではなく、メソッドから、CSSを指定して、色を変更しました。
+
+上記のようにjQueryを利用しますが、headにおくとうまく作動しません。それはまだ「body」の内容を読んでいなうちには実行できないためです。
+そのために、「.ready」という関数を使います。
+関数を使ったソースは以下の通りです。HTMLファイルとは別に「sample.js」というファイルを用意してHTMLファイルから読み込みましょう。
+HTML
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+ 　&lt;head&gt;
+ 　　　&lt;meta charset="utf-8"&gt;
+ 　　　&lt;script src="jquery.min.js" type="text/javascript"&gt;&lt;/script&gt;
+ 　　　&lt;script src="sample.js" type="text/javascript"&gt;&lt;/script&gt;
+ 　　　&lt;title&gt;jQuery&lt;/title&gt;
+ 　&lt;/head&gt;
+ 　&lt;body&gt;
+ 　　　&lt;ul&gt;
+ 　　　　　&lt;li id="sample"&gt;sample_textsample_text&lt;/li&gt;
+ 　　　　　&lt;li&gt;sample_textsample_text&lt;/li&gt;
+ 　　　　　&lt;li&gt;sample_textsample_text&lt;/li&gt;
+ 　　　　　&lt;li&gt;sample_textsample_text&lt;/li&gt;
+ 　　　　　&lt;li&gt;sample_textsample_text&lt;/li&gt;
+ 　　　&lt;/ul&gt;
+ 　&lt;/body&gt;
+&lt;/html&gt;
+JavaScript
+$(document).ready(function(){
+  $("#sample").css("color","#d9534f");
+});
+jQueryの基本的な構文については以上です。
+jQueryは使えるとWebコーディングの幅が広がるライブラリなので、ぜひともマスターしてみてください。
+&nbsp;
+
+&nbsp;
+$()の間に、#sampleがありますね。
+&nbsp;
+
+&nbsp;
+$()の間に書く物によって動作が変わるんだけど、このサンプルの場合はdocument.getElementById(&#8220;sample&#8221;);と同じ動作になってるんだ。
+&nbsp;
+
+&nbsp;
+idによって取得したエレメントオブジェクトをcss関数を使って色を変えてるんですね。
+&nbsp;
+
+&nbsp;
+その通り！$()の中には、HTMLのタグを書いたりも出来るし、その他に色々な指定が出来るんだ。
+&nbsp;
+[お知らせ]TechAcademyでは最短4週間でフロントエンドの技術が身につくフロントエンドオンラインブートキャンプを開催しています。jQueryを使ってリッチなWebサービスを作りたい方はぜひご覧ください。
+
+      </div>
+    </div>
+    <span class="entry-category">
+      JavaScript
+    </span>
+  </div>
+</div>
+</div><!-- Similar Posts took 90.040 ms -->    </div>
+  
+  <!-- Outbrain -->
+  <!--<div class="OUTBRAIN wow fadeInUp" data-src="https://techacademy.jp/magazine/1742" data-widget-id="AR_1" data-ob-template="TechAcademy"></div>-->
+
+</div>
+
+          </div>
+
+    <div class="sidenav col-md-3 col-sm-3">
+
+    <div class="section ad">
+      <a href="https://techacademy.jp/briefing-lp-s?utm_source=tamagazine&utm_medium=referral&utm_campaign=sidebar-bottom-l" target="_blank">
+        <img src="https://static.techacademy.jp/magazine/wp-content/uploads/2016/06/common_01_300-250.jpg" alt="" />
+      </a>
+    </div>
+
+    
+      <div class="section ad">
+        <!-- TechAcademy_SidebarTop_300x250 -->
+        <ins class="adsbygoogle"
+             style="display:inline-block;width:300px;height:250px"
+             data-ad-client="ca-pub-2002061910642335"
+             data-ad-slot="5342688305"></ins>
+        <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+      </div>
+
+    
+    <div class="section ranking">
+      <h4 class="side-mini-title title-danger"><i class="fa fa-line-chart fa-l"></i>WEEKLY RANKING</h4>
+              
+<!-- WordPress Popular Posts Plugin v3.3.3 [PHP] [weekly] [views] [custom] -->
+
+<div>
+<div class='entry-list t2'><div class='entry row'><div class='entry-eyecatch'><a href='https://techacademy.jp/magazine/1330'><div class='eyecatch-image' style='background-image:url(https://static.techacademy.jp/magazine/wp-content/uploads/2013/12/eyecatch-20131227_02.jpg)'></div></a></div><h4 class='entry-title'><a href='https://techacademy.jp/magazine/1330'>意外と簡単？Photoshopで画像を切り抜く方法</a></h4></div></div><div class='entry-list t2'><div class='entry row'><div class='entry-eyecatch'><a href='https://techacademy.jp/magazine/9927'><div class='eyecatch-image' style='background-image:url(https://static.techacademy.jp/magazine/wp-content/uploads/2016/09/31583936_l-800x533-800x533.jpg)'></div></a></div><h4 class='entry-title'><a href='https://techacademy.jp/magazine/9927'>【超便利！】Excel(エクセル)でカレンダーを作成する方法</a></h4></div></div><div class='entry-list t2'><div class='entry row'><div class='entry-eyecatch'><a href='https://techacademy.jp/magazine/9872'><div class='eyecatch-image' style='background-image:url(https://static.techacademy.jp/magazine/wp-content/uploads/2016/09/IMARIP0I9A7464_TP_V-800x533.jpg)'></div></a></div><h4 class='entry-title'><a href='https://techacademy.jp/magazine/9872'>【作業が圧倒的に早くなる！】知っておきたいExcel(エクセル)の関数10選</a></h4></div></div><div class='entry-list t2'><div class='entry row'><div class='entry-eyecatch'><a href='https://techacademy.jp/magazine/5318'><div class='eyecatch-image' style='background-image:url(https://static.techacademy.jp/magazine/wp-content/uploads/2015/02/eyecatch-20150213_011.jpg)'></div></a></div><h4 class='entry-title'><a href='https://techacademy.jp/magazine/5318'>今さら聞けない！コマンドプロンプトの使い方【初心者向け】</a></h4></div></div><div class='entry-list t2'><div class='entry row'><div class='entry-eyecatch'><a href='https://techacademy.jp/magazine/6235'><div class='eyecatch-image' style='background-image:url(https://static.techacademy.jp/magazine/wp-content/uploads/2015/09/eyecatch-20151002-620x349.jpg)'></div></a></div><h4 class='entry-title'><a href='https://techacademy.jp/magazine/6235'>今さら聞けない！GitHubの使い方【超初心者向け】</a></h4></div></div><div class='entry-list t2'><div class='entry row'><div class='entry-eyecatch'><a href='https://techacademy.jp/magazine/8801'><div class='eyecatch-image' style='background-image:url(https://static.techacademy.jp/magazine/wp-content/uploads/2016/07/WhatJSMock1_Social_1200x682-800x369.png)'></div></a></div><h4 class='entry-title'><a href='https://techacademy.jp/magazine/8801'>JavaScriptとは何なのか！初心者向けに徹底解説</a></h4></div></div><div class='entry-list t2'><div class='entry row'><div class='entry-eyecatch'><a href='https://techacademy.jp/magazine/6270'><div class='eyecatch-image' style='background-image:url(https://static.techacademy.jp/magazine/wp-content/uploads/2015/10/eyecatch-bootstrap-620x349.jpg)'></div></a></div><h4 class='entry-title'><a href='https://techacademy.jp/magazine/6270'>Webデザインの知識がなくてもOK！Bootstrapの使い方【入門者向け】</a></h4></div></div><div class='entry-list t2'><div class='entry row'><div class='entry-eyecatch'><a href='https://techacademy.jp/magazine/9250'><div class='eyecatch-image' style='background-image:url(https://static.techacademy.jp/magazine/wp-content/uploads/2016/08/57984339_l-800x533.jpg)'></div></a></div><h4 class='entry-title'><a href='https://techacademy.jp/magazine/9250'>今さら聞けない！Javaとは 【初心者向け】</a></h4></div></div><div class='entry-list t2'><div class='entry row'><div class='entry-eyecatch'><a href='https://techacademy.jp/magazine/4872'><div class='eyecatch-image' style='background-image:url(https://static.techacademy.jp/magazine/wp-content/uploads/2014/04/eyecatch-20141202_01.jpg)'></div></a></div><h4 class='entry-title'><a href='https://techacademy.jp/magazine/4872'>スタイルシート（CSS）の基本的な書き方【初心者向け】</a></h4></div></div><div class='entry-list t2'><div class='entry row'><div class='entry-eyecatch'><a href='https://techacademy.jp/magazine/8735'><div class='eyecatch-image' style='background-image:url(https://static.techacademy.jp/magazine/wp-content/uploads/2016/07/8f796b3ea4f2a3615f7986b74e532c97-800x495.png)'></div></a></div><h4 class='entry-title'><a href='https://techacademy.jp/magazine/8735'>【データから紐解く！】2017年の人気プログラミング言語を徹底比較！</a></h4></div></div>
+</div>
+
+<!-- End WordPress Popular Posts Plugin v3.3.3 -->
+          </div>
+
+    <div class="section twitter-box">
+      <a href="https://twitter.com/techacademy" class="twitter-follow-button" data-show-count="false" data-size="large">Follow @techacademy</a>
+    </div>
+
+    <div class="section facebook-box">
+      <div class="fb-page" data-href="https://www.facebook.com/techacademy/" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><div class="fb-xfbml-parse-ignore"><blockquote cite="https://www.facebook.com/techacademy/"><a href="https://www.facebook.com/techacademy/">TechAcademy [テックアカデミー]</a></blockquote></div></div>
+    </div>
+
+    <div class="section search-form">
+      <form role="search" method="get" id="searchform" action="https://techacademy.jp/magazine/" >
+        <input type="text" value="" name="s" class="search-input" placeholder="キーワード" />
+        <input type="submit" class="btn btn-danger search-btn" value="検索" />
+      </form>
+    </div>
+
+    <div class="scroll-follow">
+      <div class="ad">
+        <a href="https://techacademy.jp/briefing-lp-s?utm_source=tamagazine&utm_medium=referral&utm_campaign=sidebar-bottom" target='_blank'>
+          <img src="https://static.techacademy.jp/magazine/wp-content/uploads/2017/04/online-bootcamp_300-250_06.jpg" alt="オンラインブートキャンプ説明会" />
+        </a>
+      </div>
+    </div>
+
+</div>
+
+
+
+
+  </div>
+</div>
+
+          <div class="sidebar">
+                </div>
+    
+</div>
+<!-- /container-fluid -->
+
+<!--breadcrumbs-->
+
+  <div class="breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <span typeof="v:Breadcrumb">
+        <a rel="v:url" property="v:title" title="TechAcademy（テックアカデミー）" href="https://techacademy.jp/" class="breadcrumb-home"><i class="fa fa-home"></i><strong>TechAcademy（テックアカデミー）</strong></a>
+      </span>
+              <span typeof="v:Breadcrumb">
+          <a rel="v:url" property="v:title" title="フロントエンドコース" href="https://techacademy.jp/frontend-bootcamp">フロントエンドコース</a>
+        </span>
+            <!-- Breadcrumb NavXT 5.4.0 -->
+<span typeof="v:Breadcrumb"><a rel="v:url" property="v:title" title="Go to the プログラミング category archives." href="https://techacademy.jp/magazine/programming" class="taxonomy category">プログラミング</a></span><span typeof="v:Breadcrumb"><a rel="v:url" property="v:title" title="Go to the JavaScript category archives." href="https://techacademy.jp/magazine/programming/javascript" class="taxonomy category">JavaScript</a></span><span typeof="v:Breadcrumb"><a rel="v:url" property="v:title" title="Go to 非同期処理を覚える！jQueryでajaxを利用する方法【初心者向け】." href="https://techacademy.jp/magazine/9454" class="post post-post current-item">非同期処理を覚える！jQueryでajaxを利用する方法【初心者向け】</a></span>    </div>
+  </div>
+<!--/breadcrumbs-->
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="row">
+        <div class="col-md-3 col-sm-6 col-xs-6">
+          <h4>MENU</h4>
+          <ul>
+            <li>
+              <a href="https://techacademy.jp/magazine/about">当メディアについて</a>
+            </li>
+            <li>
+              <a href="https://techacademy.jp/magazine/ads">広告掲載について</a>
+            </li>
+            <li>
+              <a href="https://techacademy.jp/magazine/contact">お問い合わせ</a>
+            </li>
+            <li>
+              <a href="https://techacademy.jp/magazine/category">カテゴリーから探す</a>
+            </li>
+            <li>
+              <a href="https://techacademy.jp/magazine/archive">アーカイブから探す</a>
+            </li>
+            <li>
+              <a href="https://techacademy.jp/magazine/keyword">キーワードから探す</a>
+            </li>
+          </ul>
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-6">
+          <h4>TechAcademy</h4>
+          <ul>
+              <li>
+                <a target="_blank" href="https://techacademy.jp/rails-bootcamp"><i class="fa fa-diamond fa-fw fa-l"></i>Webアプリ<span class="mobile-hide">ケーション</span>コース</a>
+              </li>
+              <li>
+                <a target="_blank" href="https://techacademy.jp/webdesign-bootcamp"><i class="fa fa-object-group fa-fw fa-l"></i>Webデザインコース</a>
+              </li>
+              <li>
+                <a target="_blank" href="https://techacademy.jp/frontend-bootcamp"><i class="fa fa-code fa-fw fa-l"></i>フロントエンドコース</a>
+              </li>
+              <li>
+                <a target="_blank" href="https://techacademy.jp/webdirection-bootcamp"><i class="fa fa-sitemap fa-fw fa-l"></i>Webディレクションコース</a>
+              </li>
+              <li>
+                <a target="_blank" href="https://techacademy.jp/webmarketing-bootcamp"><i class="fa fa-line-chart fa-fw fa-l"></i>Webマーケティングコース</a>
+              </li>
+              <li>
+                <a target="_blank" href="https://techacademy.jp/wordpress-bootcamp"><i class="fa fa-wordpress fa-fw fa-l"></i>WordPressコース</a>
+              </li>
+              <li>
+                <a target="_blank" href="https://techacademy.jp/iphone-bootcamp"><i class="fa fa-apple fa-fw fa-l"></i>iPhoneアプリコース</a>
+              </li>
+              <li>
+                <a target="_blank" href="https://techacademy.jp/android-bootcamp"><i class="fa fa-android fa-fw fa-l"></i>Androidアプリコース</a>
+              </li>
+              <li>
+                <a target="_blank" href="https://techacademy.jp/unity-bootcamp"><i class="fa fa-fw fa-gamepad fa-l"></i>Unityコース</a>
+              </li>
+              <li>
+                <a target="_blank" href="https://techacademy.jp/appdesign-bootcamp"><i class="fa fa-tablet fa-fw fa-l"></i>UI/UXデザインコース</a>
+              </li>
+              <li>
+                <a target="_blank" href="https://techacademy.jp/first-programming-bootcamp"><i class="fa fa-leaf fa-fw fa-l"></i>はじ<span class="mobile-hide">めての</span>プロ<span class="mobile-hide">グラミング</span>コース</a>
+              </li>
+          </ul>
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-6">
+          <h4 class="bottom-row">GROUP SERVICE</h4>
+          <ul>
+            <li>
+              <a target="_blank" href="https://techacademy.jp/junior">TechAcademyジュニア</a>
+            </li>
+            <li>
+              <a target="_blank" href="https://techacademy.jp/career-prep">オンライン就職予備校</a>
+            </li>
+            <li>
+              <a target="_blank" href="https://techacademy.jp/corporate">新入社員向けITスキル研修</a>
+            </li>
+            <li>
+              <a target="_blank" href="https://techacademy.jp/recruit">IT人材採用支援</a>
+            </li>
+            <li>
+              <a target="_blank" href="https://edtech.jp">EdTech.jp（ITスクール検索）</a>
+            </li>
+          </ul>
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-6">
+          <h4 class="bottom-row" id="mail-magazine">MAIL MAGAZINE</h4>
+          <p><i class="fa fa-envelope fa-l"></i><span class="mobile-hide">新着記事などの</span>メルマガを受け取る
+          </p>
+          <div class="mailmagazine-form">
+            <form action="//techacademy.us7.list-manage.com/subscribe/post?u=6764cbdd9a282f9833a6f0a12&amp;id=16870b33f3" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+              <input class="input-email" placeholder="hello@techacademy.jp" required="required" type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL"><input type="submit" name="commit" value="登録" class="input-btn btn btn-xs btn-gray" data-disable-with="送信中…">
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="row">
+        <div class="copyright col-md-6 col-sm-6 col-xs-6">
+          &copy;&nbsp;<span>2009 - 2017&nbsp;</span>KiRAMEX &nbsp;<span class="mobile-hide">CORPORATION.</span>
+        </div>
+        <div class="social-links col-md-6 col-sm-6 col-xs-6">
+          <a target="_blank" href="https://www.facebook.com/techacademy"><i class="fa fa-facebook"></i></a><a target="_blank" href="https://twitter.com/techacademy"><i class="fa fa-twitter"></i></a><a target="_blank" href="https://plus.google.com/+TechacademyJp"><i class="fa fa-google-plus"></i></a><a target="_blank" href="https://techacademy.jp/magazine/feed/"><i class="fa fa-rss"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script type='text/javascript'>
+/* <![CDATA[ */
+var leadin_wordpress = {"userRole":"visitor","pageType":"post","leadinPluginVersion":"6.1.2"};
+/* ]]> */
+</script>
+<script type='text/javascript' async defer src='//js.hs-scripts.com/1823092.js?ver=4.8.1'></script>
+<script type='text/javascript' src='https://s0.wp.com/wp-content/js/devicepx-jetpack.js?ver=201731'></script>
+<script type='text/javascript' src='https://static.techacademy.jp/magazine/wp-includes/js/wp-embed.min.js?ver=4.8.1'></script>
+<script type='text/javascript' src='https://stats.wp.com/e-201731.js' async defer></script>
+<script type='text/javascript'>
+	_stq = window._stq || [];
+	_stq.push([ 'view', {v:'ext',j:'1:4.0.4',blog:'44127139',post:'9454',tz:'9',srv:'techacademy.jp'} ]);
+	_stq.push([ 'clickTrackerInit', '44127139', '9454' ]);
+</script>
+
+<a class="pagetop" href="#top"></a>
+
+<!-- Pocket-->
+<script type="text/javascript">!function(d,i){if(!d.getElementById(i)){var j=d.createElement("script");j.id=i;j.src="https://widgets.getpocket.com/v1/j/btn.js?v=1";var w=d.getElementById(i);d.body.appendChild(j);}}(document,"pocket-btn-js");</script>
+<!-- /Pocket-->
+
+<!-- Criteo-->
+<script type="text/javascript" src="//static.criteo.net/js/ld/ld.js" async="true"></script>
+<script type="text/javascript">
+window.criteo_q = window.criteo_q || [];
+window.criteo_q.push(
+  { event: "setAccount", account: 30101 },
+  { event: "setSiteType", type: "m" },
+  { event: "viewItem", item: "briefing_12" }
+);
+</script>
+<!-- /Criteo-->
+
+<!-- Intercom-->
+<!-- /Intercom-->
+
+</body>
+</html>
+
+<!-- Dynamic page generated in 0.590 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2017-08-03 07:51:48 -->
+
+<!-- Compression = gzip -->

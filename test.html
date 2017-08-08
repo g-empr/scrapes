@@ -7,19 +7,44 @@
 	<script type="text/javascript" src="jquery.xdomainajax.js"></script>
 </head>
 <body>
-	<div id="container"></div>
-	
-	<script type=text/javascript>
-	$(function() {
-		$.ajax({
-			url: 'https://www.famitsu.com/',
-			type: 'GET',
-			success: function(data) {
-				$('#container').html(data.responseText);
-                console.log('aaaa');
-			}
-		});
-	}); 
-	</script> 
+	<div id="box"></div>
+
+	<script>
+
+	//エスケープ回避用
+	function convert(str) {
+		str = str.replace(/<result>/g,'')
+				 .replace(/<\/result>/g,'')
+				 .replace(/&amp;/g,'&')
+				 .replace(/&lt;/g,'<')
+				 .replace(/&gt;/g,'>')
+				 .replace(/&quot;/g,'"')
+				 .replace(/&apos;/g,"'");
+		return str;
+	}
+
+	//オブジェクト取り出し
+	$.ajax({
+		type: 'GET',
+		url: 'http://yomou.syosetu.com/rank/genretop/',
+		success: function(data) {
+			//全体を変換
+			content = convert(data.responseText);
+			dom = $(content); //テキスト→jQオブジェクト
+			//dom.appendTo('body');
+
+			//対象文字列抜き出し
+			var re = new RegExp('<title>(\.\*\?)<\/title>');
+			title = content.match(re);
+			title = title[1]; //後方参照した箇所を代入
+			$('title').text(title);
+
+			//
+		},
+		error:function() {
+			console.log("エラー。");
+		}
+	});
+	</script>
 </body>
 </html>
